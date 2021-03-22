@@ -1,0 +1,9 @@
+name = "LargeDefs"
+uuid = "26e61d48-c400-42ae-8c4b-b787bba07d49"
+authors = ["sam <samadritakarmakar@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Tensors = "48a634ad-e948-5137-8d70-aa71f2a747f4"

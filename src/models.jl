@@ -33,9 +33,10 @@ end
 function saintVenant_ψ(E::Tensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) where {dim, T}
     λ = λ_μ[1]
     μ = λ_μ[2]
-    Ie = getFirstInvariant(E)
-    IIe = getSecondInvariant(E)
-    return 0.5*(λ + 2*μ)*Ie^2 - 2*μ*IIe
+    C = 2*E + one(E)
+    Ic = getFirstInvariant(C)
+    IIc = getSecondInvariant(C)
+    return 1.0/8.0*(λ + 2*μ)*(Ic - 3.0)^2 - μ/2.0 * (-2*Ic + IIc + 3)
 end
 
 function saintVenantSecondPiola(E::Tensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}

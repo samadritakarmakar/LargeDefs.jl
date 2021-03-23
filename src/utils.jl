@@ -1,7 +1,7 @@
 using Tensors, ForwardDiff
 
 function get2DTensor(array::Array{T, 2}, dim::Int64 = 3) where T
-    return Tensor{2,dim,T}((i,j) -> array[i,j])
+    return Tensor{2,dim,T}(array)
 end
 
 function get_∂u_∂X_Tensor(array::Array{T, 2}, dim::Int64 = 3) where T
@@ -12,7 +12,7 @@ function getDeformationGradient(∂u_∂X::Tensor{2,dim,T}) where {dim, T}
     return one(∂u_∂X) + ∂u_∂X
 end
 
-getJacobianDeformationGradient(F) = det(F)
+getJacobianDeformationGradient(F::Tensor{2,dim,T}) = det(F)
 
 function getRightCauchyTensor(F::Tensor{2,dim,T}) where {dim, T}
     return F'⋅F

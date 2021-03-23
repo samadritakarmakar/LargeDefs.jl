@@ -28,18 +28,22 @@ function hyperElasticTest()
         #hyperModel = LargeDefs.neoHookean
         ##############################
         S_check1 = hyperModel.secondPiolaStress(𝔼_step, λ_μ)
+        #S_check3 = λ*tr(𝔼_step)*one(𝔼_step)+ 2*μ*𝔼_step
         #println("S = ", S_check1)
         #############################
         ℂ = hyperModel.materialTangentTensor(𝔼_step, λ_μ)
         ############################
         #println("ℂ = ", ℂ)
+
         if step == 1
             S_check2 = deepcopy(S_check1)
         else
             S_check2 += ℂ⊡(𝔼_step-𝔼_lastStep)
         end
-        ###########################
-        println("Second Piola Stress Check ", norm(S_check2- S_check1))
+        ###########################;
+        println("Second Piola Stress Check 1 :", norm(S_check2- S_check1))
+        #println("Second Piola Stress Check 2 :", norm(S_check3- S_check1))
+
         𝔼_lastStep = deepcopy(𝔼_step)
         S_hyd_array[step] = tr(S_check1)
         S_eff_array[step] = norm(S_check1 - 1/3*tr(S_check1)*one(S_check1))

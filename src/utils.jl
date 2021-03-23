@@ -1,16 +1,16 @@
 using Tensors, ForwardDiff
 
 function get1DTensor(array::Array{T, N}) where {T, N}
-    return reinterpret(Tensor{1,length(array), Float64}, vec(array))
+    return reinterpret(Tensor{1,length(array), Float64}, vec(array))[1]
 end
 
 
 function get2DTensor(array::Array{T, N}, dim::Int64 = 3) where {T, N}
-    return reinterpret(Tensor{2,dim, T, dim^2}, vec(array))
+    return reinterpret(Tensor{2,dim, T, dim^2}, vec(array))[1]
 end
 
 function get4DTensor(array::Array{T, N}, dim::Int64 = 3) where {T, N}
-    return reinterpret(Tensor{2,dim, T, dim^4}, vec(array))
+    return reinterpret(Tensor{2,dim, T, dim^4}, vec(array))[1]
 end
 
 function get_∂u_∂X_Tensor(array::Array{T, 2}, dim::Int64 = 3) where T
@@ -18,7 +18,7 @@ function get_∂u_∂X_Tensor(array::Array{T, 2}, dim::Int64 = 3) where T
 end
 
 function getDeformationGradient(∂u_∂X::T) where T
-    return reinterpret(Tensor{2,3,Float64, 9} ,vec([1.0 0 0; 0 1.0 0; 0 0 1.0])) + ∂u_∂X
+    return one(∂u_∂X) + ∂u_∂X
 end
 
 function getJacobianDeformationGradient(F::Array{Tensor{2,3,T,9},1}) where T

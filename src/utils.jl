@@ -12,7 +12,7 @@ function getDeformationGradient(∂u_∂X::Tensor{2,dim,T}) where {dim, T}
     return one(∂u_∂X) + ∂u_∂X
 end
 
-getJacobianDeformationGradient(F::Tensor{2,dim,T}) = det(F)
+getJacobianDeformationGradient(F::Tensor{2,dim,T}) where {dim, T} = det(F)
 
 function getRightCauchyTensor(F::Tensor{2,dim,T}) where {dim, T}
     return F'⋅F

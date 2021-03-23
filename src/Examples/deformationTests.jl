@@ -58,6 +58,6 @@ function hyperElasticTest()
 
         #println("Spatial Tangent Tensor Check ", norm(𝕔_mandel - LargeDefs.convert4DTensorToMandel(𝕔_tensor))<1e-9)
     end
-    plot(𝔼_array, S_hyd_array)
-    plot(𝔼_array, S_eff_array)
+    plot(𝔼_array, S_hyd_array, label = "Hydrostatic Stress")
+    plot(𝔼_array, S_eff_array, label = "Norm Deviatoric Stress")
 end

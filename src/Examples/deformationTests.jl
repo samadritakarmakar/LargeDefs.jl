@@ -23,8 +23,8 @@ function hyperElasticTest()
         Jacobian = LargeDefs.getJacobianDeformationGradient(F)
         𝔼_step = LargeDefs.getGreenLagrangeStrain(F)
         #println("E = ", 𝔼_step)
-        hyperModel = LargeDefs.saintVenant
-        #hyperModel = LargeDefs.neoHookeanCompressible
+        #hyperModel = LargeDefs.saintVenant
+        hyperModel = LargeDefs.neoHookeanCompressible
         #hyperModel = LargeDefs.neoHookean
         ##############################
         S_check1 = hyperModel.secondPiolaStress(𝔼_step, λ_μ)
@@ -58,6 +58,6 @@ function hyperElasticTest()
 
         #println("Spatial Tangent Tensor Check ", norm(𝕔_mandel - LargeDefs.convert4DTensorToMandel(𝕔_tensor))<1e-9)
     end
-    plot(𝔼_array, S_hyd_array, label = "Hydrostatic Stress")
-    plot(𝔼_array, S_eff_array, label = "Norm Deviatoric Stress")
+    #plot(𝔼_array, S_hyd_array, label = "Hydrostatic Stress")
+    #plot(𝔼_array, S_eff_array, label = "Norm Deviatoric Stress")
 end

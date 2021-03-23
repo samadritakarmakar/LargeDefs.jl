@@ -1,11 +1,16 @@
 using Tensors, ForwardDiff
 
-function name(args)
-    body
+function get1DTensor(array::Array{T, N}) where {T, N}
+    return reinterpret(Tensor{1,length(array), Float64}, vec(array))
 end
 
-function get2DTensor(array::Array{T, 2}, dim::Int64 = 3) where T
+
+function get2DTensor(array::Array{T, N}, dim::Int64 = 3) where {T, N}
     return reinterpret(Tensor{2,dim, T, dim^2}, vec(array))
+end
+
+function get4DTensor(array::Array{T, N}, dim::Int64 = 3) where {T, N}
+    return reinterpret(Tensor{2,dim, T, dim^4}, vec(array))
 end
 
 function get_∂u_∂X_Tensor(array::Array{T, 2}, dim::Int64 = 3) where T

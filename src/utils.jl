@@ -1,7 +1,7 @@
 using Tensors, ForwardDiff
 
 function get1DTensor(array::Array{T, N}) where {T, N}
-    return reinterpret(Tensor{1,length(array), Float64}, vec(array))[1]
+    return reinterpret(Tensor{1,length(array), T, length(array)}, vec(array))[1]
 end
 
 

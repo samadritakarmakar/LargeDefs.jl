@@ -1,4 +1,5 @@
 module LargeDefs
+using Tensors, LinearAlgebra, ForwardDiff
 include("utils.jl")
 include("models.jl")
 

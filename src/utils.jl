@@ -5,16 +5,16 @@ function get1DTensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}}, dim::Int6
 end
 
 
-function get2DTensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}}, dim::Int64 = 3) where {T, N}
+function get2DTensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}},  dim::Int64 = 3) where {T, N}
     return reinterpret(Tensor{2,dim, T, dim^2}, vec(array))
 end
 
-function get4DTensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}}, dim::Int64 = 3) where {T, N}
+function get4DTensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}},  dim::Int64 = 3) where {T, N}
     return reinterpret(Tensor{2,dim, T, dim^4}, vec(array))
 end
 
-function get_∂u_∂X_Tensor(array::Array{T, 2}, dim::Int64 = 3) where T
-    get2DTensor(array::Array{T, 2}, dim)[1]
+function get_∂u_∂X_Tensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}},  dim::Int64 = 3) where {T, N}
+    get2DTensor(array, dim)[1]
 end
 
 function getDeformationGradient(∂u_∂X::T) where T

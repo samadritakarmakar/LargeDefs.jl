@@ -10,7 +10,7 @@ function hyperElasticTest()
     λ_μ = (λ, μ)
     ∂u_∂X_array = zeros(3,3)
     ∂u_∂X_array[1] = 1e-4
-    ∂u_∂X_total = get_∂u_∂X_Tensor(∂u_∂X_array)
+    ∂u_∂X_total = get_∂u_∂X_Tensor(∂u_∂X_array')
     totalSteps = 10
     𝔼_lastStep = zero(Tensor{2,3, Float64})
     S_check2 = zero(Tensor{2,3, Float64})

@@ -1,15 +1,15 @@
 using Tensors, ForwardDiff
 
-function get1DTensor(array::Array{T, N}, dim::Int64 = 3) where {T, N}
+function get1DTensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}}, dim::Int64 = 3) where {T, N}
     return reinterpret(Tensor{1,dim, T, dim}, vec(array))
 end
 
 
-function get2DTensor(array::Array{T, N}, dim::Int64 = 3) where {T, N}
+function get2DTensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}}, dim::Int64 = 3) where {T, N}
     return reinterpret(Tensor{2,dim, T, dim^2}, vec(array))
 end
 
-function get4DTensor(array::Array{T, N}, dim::Int64 = 3) where {T, N}
+function get4DTensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}}, dim::Int64 = 3) where {T, N}
     return reinterpret(Tensor{2,dim, T, dim^4}, vec(array))
 end
 

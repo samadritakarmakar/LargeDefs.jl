@@ -14,7 +14,7 @@ function hyperElasticTest()
     ∂u_∂X_array[3,3] = -.12
     #∂u_∂X_array = [0.5000000000000002 4.163336342344337e-17 -1.3877787807814457e-17; -2.0816681711721685e-17 -0.11982540819326219 -1.5959455978986625e-16; 2.0816681711721685e-17 1.3877787807814457e-17 -0.11982540819326216]
     ∂u_∂X_total = get_∂u_∂X_Tensor(∂u_∂X_array)
-    totalSteps = 1
+    totalSteps = 2
     𝔼_lastStep = zero(Tensor{2,3, Float64})
     S_check2 = zero(Tensor{2,3, Float64})
     S_hyd_array = zeros(totalSteps)

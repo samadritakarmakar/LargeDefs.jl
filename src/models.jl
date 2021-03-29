@@ -3,7 +3,7 @@ struct HyperElasticModel
     materialTangentTensor::Function
 end
 
-function secondPiolaStressGreenLagrangeBased(model_ψ::Function, E::Tensor{2,dim,T}, parameters::Tuple) where {dim, T}
+function secondPiolaStressGreenLagrangeBased(model_ψ::Function, E::SymmetricTensor{2,dim,T}, parameters::Tuple) where {dim, T}
     ψ(e) = model_ψ(e, parameters)
     return gradient(ψ, E)
 end
@@ -15,7 +15,7 @@ function secondPiolaStressRightCauchyBased(model_ψ::Function, C::Tensor{2,dim,T
 end
 =#
 
-function materialTangentGreenLagrangeBased(model_ψ::Function, E::Tensor{2,dim,T}, parameters::Tuple) where {dim, T}
+function materialTangentGreenLagrangeBased(model_ψ::Function, E::SymmetricTensor{2,dim,T}, parameters::Tuple) where {dim, T}
     ψ(e) = model_ψ(e, parameters)
     return hessian(ψ, E)
 end
@@ -30,7 +30,7 @@ end
 ##############Models are Defined Below################################################
 
 #########################Saint Venant###################################################3
-function saintVenant_ψ(E::Tensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) where {dim, T}
+function saintVenant_ψ(E::SymmetricTensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) where {dim, T}
     λ = λ_μ[1]
     μ = λ_μ[2]
     C = 2*E + one(E)
@@ -39,11 +39,11 @@ function saintVenant_ψ(E::Tensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) wher
     return 1.0/8.0*(λ + 2*μ)*(Ic - 3.0)^2 - μ/2.0 * (-2*Ic + IIc + 3)
 end
 
-function saintVenantSecondPiola(E::Tensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
+function saintVenantSecondPiola(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
     return secondPiolaStressGreenLagrangeBased(saintVenant_ψ, E, parameters)
 end
 
-function saintVenantMaterialTangent(E::Tensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
+function saintVenantMaterialTangent(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
     return materialTangentGreenLagrangeBased(saintVenant_ψ, E, parameters)
 end
 
@@ -51,7 +51,7 @@ const saintVenant = HyperElasticModel(saintVenantSecondPiola, saintVenantMateria
 #######################################################################################
 
 ##########################Neo Hookean Compressible#########################################
-function neoHookeanCompressible_ψ(E::Tensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) where {dim, T}
+function neoHookeanCompressible_ψ(E::SymmetricTensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) where {dim, T}
     λ = λ_μ[1]
     μ = λ_μ[2]
     C = 2*E + one(E)
@@ -60,11 +60,11 @@ function neoHookeanCompressible_ψ(E::Tensor{2,dim,T}, λ_μ::Tuple{Float64, Flo
     return μ / 2 * (Ic - 3) - μ * log(J) + λ / 2 * log(J)^2
 end
 
-function neoHookeanCompressibleSecondPiola(E::Tensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
+function neoHookeanCompressibleSecondPiola(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
     return secondPiolaStressGreenLagrangeBased(neoHookeanCompressible_ψ, E, parameters)
 end
 
-function neoHookeanCompressibleMaterialTangent(E::Tensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
+function neoHookeanCompressibleMaterialTangent(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
     return materialTangentGreenLagrangeBased(neoHookeanCompressible_ψ, E, parameters)
 end
 
@@ -72,7 +72,7 @@ const neoHookeanCompressible = HyperElasticModel(neoHookeanCompressibleSecondPio
 #######################################################################################
 
 ##########################Neo Hookean#########################################
-function neoHookean_ψ(E::Tensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) where {dim, T}
+function neoHookean_ψ(E::SymmetricTensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) where {dim, T}
     λ = λ_μ[1]
     μ = λ_μ[2]
     C = 2*E + one(E)
@@ -81,11 +81,11 @@ function neoHookean_ψ(E::Tensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) where
     return μ / 2 * (Ic - 3)
 end
 
-function neoHookeanSecondPiola(E::Tensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
+function neoHookeanSecondPiola(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
     return secondPiolaStressGreenLagrangeBased(neoHookean_ψ, E, parameters)
 end
 
-function neoHookeanMaterialTangent(E::Tensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
+function neoHookeanMaterialTangent(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
     return materialTangentGreenLagrangeBased(neoHookean_ψ, E, parameters)
 end
 

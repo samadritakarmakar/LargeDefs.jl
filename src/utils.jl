@@ -29,11 +29,13 @@ end
 getJacobianDeformationGradient(F::T) where T = det(F)
 
 function getRightCauchyTensor(F::T) where T
-    return F'⋅F
+    #return F'⋅F
+    return tdot(F)
 end
 
 function getLeftCauchyTensor(F::T) where T
-    return F⋅F'
+    #return F⋅F'
+    return dott(F)
 end
 
 function getGreenLagrangeStrain(F::T) where T

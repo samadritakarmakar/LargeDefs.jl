@@ -57,3 +57,7 @@ getFirstInvariant(tensor::T) where T = tr(tensor)
 getSecondInvariant(tensor::T) where T = 0.5*(tr(tensor)^2 - tr(tensor^2))
 
 getThirdInvariant(tensor::T) where T = det(tensor)
+
+function getPrincipalStretches(F::T) where T
+    return sqrt.(eigvals(getRightCauchyTensor(F)))
+end

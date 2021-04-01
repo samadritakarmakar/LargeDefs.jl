@@ -57,7 +57,7 @@ function neoHookeanCompressible_ψ(E::SymmetricTensor{2,dim,T}, λ_μ::Tuple{Flo
     C = 2*E + one(E)
     Ic = getFirstInvariant(C)
     J = sqrt(det(C))
-    return μ / 2 * (Ic - 3) - μ * log(J) + λ / 2 * log(J)^2
+    return λ / 2 * (log(J))^2 - μ * log(J) + μ / 2 * (Ic - 3) 
 end
 
 function neoHookeanCompressibleSecondPiola(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}

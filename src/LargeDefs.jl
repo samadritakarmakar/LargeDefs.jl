@@ -8,6 +8,7 @@ export get2DTensor, get_∂u_∂X_Tensor, getDeformationGradient, getJacobianDef
 export getRightCauchyTensor, getLeftCauchyTensor, getGreenLagrangeStrain
 export getCauchyTensor, getAlmansiStrain
 export getFirstInvariant, getSecondInvariant, getThirdInvariant
+export getPrincipalStretches
 
 #models
 

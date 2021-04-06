@@ -5,24 +5,26 @@ function hyperElasticTest()
     #∂u_∂X[1] = 1e-4
     E::Float64 = 10 #MPa
     ν::Float64 = 0.3
-    #λ = (ν*E)/((1+ν)*(1-2*ν))
-    #μ = E/(2*(1+ν))
-    μ = 2.0e3
-    λ = 1.5
+    λ = (ν*E)/((1+ν)*(1-2*ν))
+    μ = E/(2*(1+ν))
+    #μ = 2.0e3
+    #λ = 1.5
     λ_μ = (λ, μ)
     ∂u_∂X_array_max = zeros(3,3)
-    ∂u_∂X_array_max[1,1] = 5.0
+    ∂u_∂X_array_max[1,1] = 0.0
     ∂u_∂X_array_max[2,2] = 0.0
     ∂u_∂X_array_max[3,3] = 0.0
 
+    ∂u_∂X_array_max[1,2] = 0.5
+
     ∂u_∂X_array_min = zeros(3,3)
-    ∂u_∂X_array_min[1,1] = -0.6
+    ∂u_∂X_array_min[1,1] = 0.0
     ∂u_∂X_array_min[2,2] = 0.0
     ∂u_∂X_array_min[3,3] = 0.0
     #∂u_∂X_array = [0.5000000000000002 4.163336342344337e-17 -1.3877787807814457e-17; -2.0816681711721685e-17 -0.11982540819326219 -1.5959455978986625e-16; 2.0816681711721685e-17 1.3877787807814457e-17 -0.11982540819326216]
     ∂u_∂X_T_max = get_∂u_∂X_Tensor(∂u_∂X_array_max)
     ∂u_∂X_T_min = get_∂u_∂X_Tensor(∂u_∂X_array_min)
-    totalSteps = 200
+    totalSteps = 20
     𝔼_lastStep = zero(Tensor{2,3, Float64})
     S_check2 = zero(Tensor{2,3, Float64})
     S_hyd_array = zeros(totalSteps+1)
@@ -72,7 +74,7 @@ function hyperElasticTest()
             ℂ_check = (μ - λ*log(Jacobian))*(otimesu(invC, invC) + otimesl(invC, invC) ) + λ * invC ⊗ invC
         end
 
-        println("Second Piola Stress Check 2 :", norm(S_check3- S_check1))
+        println("Second Piola Stress Check 2 :", norm(S_check3 - S_check1))
         println("Material Tangent Check :", norm(ℂ_check- ℂ))
 
         𝔼_lastStep = deepcopy(𝔼_step)
@@ -81,10 +83,11 @@ function hyperElasticTest()
         𝔼_array[step+1] = 𝔼_step[1]
 
         ########Find Cauchy Stress################
-        σ_array[step+1] = 1/getJacobianDeformationGradient(F)*F⋅S_check1⋅F'
+        τ = F⋅S_check1⋅F'
+        #σ_array[step+1] = 1/det(F)*τ
         #println("Cauchy Stress = ", σ_array[step+1])
         #σ₁₁_array[step+1] = σ_array[step+1][1,1]
-        σ₁₁_array[step+1] = S_check1[1,1]
+        σ₁₁_array[step+1] = S_check1[1,2]
         principalStretch = getPrincipalStretches(F)
         #if minimum(principalStretch) < 1
         #    λ₁[step+1] = minimum(principalStretch)

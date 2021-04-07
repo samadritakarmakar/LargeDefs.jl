@@ -7,15 +7,15 @@ function hyperElasticTest()
     ν::Float64 = 0.3
     λ = (ν*E)/((1+ν)*(1-2*ν))
     μ = E/(2*(1+ν))
-    #μ = 2.0e3
-    #λ = 1.5
+    #μ = 3.8
+    #λ = 1.0
     λ_μ = (λ, μ)
     ∂u_∂X_array_max = zeros(3,3)
-    ∂u_∂X_array_max[1,1] = 0.0
+    ∂u_∂X_array_max[1,1] = 0.5
     ∂u_∂X_array_max[2,2] = 0.0
     ∂u_∂X_array_max[3,3] = 0.0
 
-    ∂u_∂X_array_max[1,2] = 0.5
+    ∂u_∂X_array_max[1,2] = 0.0
 
     ∂u_∂X_array_min = zeros(3,3)
     ∂u_∂X_array_min[1,1] = 0.0
@@ -39,8 +39,8 @@ function hyperElasticTest()
     println("Δ∂u_∂X = ", Δ∂u_∂X)
     ∂u_∂X = deepcopy(∂u_∂X_T_min)
     #hyperModel = LargeDefs.saintVenant
-    hyperModel = LargeDefs.neoHookeanCompressible
-    #hyperModel = LargeDefs.neoHookean
+    #hyperModel = LargeDefs.neoHookeanCompressible
+    hyperModel = LargeDefs.neoHookean
     for step ∈ 0:totalSteps
         F = LargeDefs.getDeformationGradient(∂u_∂X)
         println("F = ", F)
@@ -65,17 +65,22 @@ function hyperElasticTest()
         ###########################;
         println("Second Piola Stress Check 1 :", norm(S_check2- S_check1))
         C = LargeDefs.getRightCauchyTensor(F)
+        printFlag = false
         if hyperModel == LargeDefs.saintVenant
             S_check3 = λ*tr(𝔼_step)*one(𝔼_step)+ 2*μ*𝔼_step
             ℂ_check = λ*(one(𝔼_step) ⊗ one(𝔼_step)) + 2 * μ * one(SymmetricTensor{4, 3})
+            printFlag = true
         elseif hyperModel == LargeDefs.neoHookeanCompressible
             invC = inv(C)
             S_check3 = μ*(one(C)-invC) + λ*(log(Jacobian))*invC
             ℂ_check = (μ - λ*log(Jacobian))*(otimesu(invC, invC) + otimesl(invC, invC) ) + λ * invC ⊗ invC
+            printFlag = true
         end
 
-        println("Second Piola Stress Check 2 :", norm(S_check3 - S_check1))
-        println("Material Tangent Check :", norm(ℂ_check- ℂ))
+        if (printFlag)
+            println("Second Piola Stress Check 2 :", norm(S_check3 - S_check1))
+            println("Material Tangent Check :", norm(ℂ_check- ℂ))
+        end
 
         𝔼_lastStep = deepcopy(𝔼_step)
         S_hyd_array[step+1] = tr(S_check1)
@@ -87,7 +92,7 @@ function hyperElasticTest()
         #σ_array[step+1] = 1/det(F)*τ
         #println("Cauchy Stress = ", σ_array[step+1])
         #σ₁₁_array[step+1] = σ_array[step+1][1,1]
-        σ₁₁_array[step+1] = S_check1[1,2]
+        σ₁₁_array[step+1] = S_check1[1,1]
         principalStretch = getPrincipalStretches(F)
         #if minimum(principalStretch) < 1
         #    λ₁[step+1] = minimum(principalStretch)

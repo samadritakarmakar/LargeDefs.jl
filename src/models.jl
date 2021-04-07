@@ -78,7 +78,8 @@ function neoHookean_ψ(E::SymmetricTensor{2,dim,T}, λ_μ::Tuple{Float64, Float6
     C = 2*E + one(E)
     Ic = getFirstInvariant(C)
     J = sqrt(det(C))
-    return μ / 2 * (Ic - 3) + (λ / 2) * (J - 1)^2
+    Ī₁ = J^(-2/3)*Ic
+    return μ / 2 * (Ī₁ - 3) + (λ / 2) * (J - 1)^2
 end
 
 function neoHookeanSecondPiola(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}

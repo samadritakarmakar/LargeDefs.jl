@@ -72,14 +72,14 @@ const neoHookeanCompressible = HyperElasticModel(neoHookeanCompressibleSecondPio
 #######################################################################################
 
 ##########################Neo Hookean#########################################
-function neoHookean_ψ(E::SymmetricTensor{2,dim,T}, λ_μ::Tuple{Float64, Float64}) where {dim, T}
-    λ = λ_μ[1]
-    μ = λ_μ[2]
+function neoHookean_ψ(E::SymmetricTensor{2,dim,T}, D1_μ::Tuple{Float64, Float64}) where {dim, T}
+    D1 = D1_μ[1]
+    μ = D1_μ[2]
     C = 2*E + one(E)
     Ic = getFirstInvariant(C)
     J = sqrt(det(C))
     Ī₁ = J^(-2/3)*Ic
-    return μ / 2 * (Ī₁ - 3) + (λ / 2) * (J - 1)^2
+    return (μ / 2) * (Ī₁ - 3.0) +  (1.0/D1) * (J - 1)^2
 end
 
 function neoHookeanSecondPiola(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}

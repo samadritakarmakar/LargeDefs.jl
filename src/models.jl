@@ -27,6 +27,20 @@ function materialTangentRightCauchyBased(model_ψ::Function, C::Tensor{2,dim,T},
 end
 =#
 
+function cauchyStress(model::HyperElasticModel, F::Tensor{2,dim,T}, parameters::Tuple) where {dim, T}
+    E = getRightCauchyTensor(F)
+    S = model.secondPiolaStress(E, parameters)
+    return symmetric(1/det(F)*F⋅S⋅F')
+end
+
+function spatialTangentTensor(model::HyperElasticModel, F::Tensor{2,dim,T}, parameters::Tuple) where {dim, T}
+    E = getRightCauchyTensor(F)
+    C = model.materialTangentTensor(E, parameters)
+    F_front = otimesu(F, F)
+    F_back = otimesl(F, F)
+    return symmetric(1/det(F)*(F_front⊡C⊡F_back))
+end
+
 ##############Models are Defined Below################################################
 
 #########################Saint Venant###################################################3
@@ -91,3 +105,4 @@ function neoHookeanMaterialTangent(E::SymmetricTensor{2,dim,T}, parameters::Tupl
 end
 
 const neoHookean = HyperElasticModel(neoHookeanSecondPiola, neoHookeanMaterialTangent)
+

@@ -13,7 +13,7 @@ export getPrincipalStretches
 #models
 
 export HyperElasticModel
-export secondPiolaStressGreenLagrangeBased, materialTangentGreenLagrangeBased
+export secondPiolaStressGreenLagrangeBased, materialTangentGreenLagrangeBased, cauchyStress, spatialTangentTensor
 export saintVenant_ψ, saintVenantSecondPiola, saintVenantMaterialTangent, saintVenant
 export neoHookeanCompressible_ψ, neoHookeanCompressibleSecondPiola, neoHookeanCompressibleMaterialTangent, neoHookeanCompressible
 

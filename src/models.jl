@@ -30,7 +30,7 @@ end
 function cauchyStress(model::HyperElasticModel, F::Tensor{2,dim,T}, parameters::Tuple) where {dim, T}
     E = getGreenLagrangeStrain(F)
     S = model.secondPiolaStress(E, parameters)
-    return symmetric(1/det(F)*F⋅S⋅F')
+    return 1/det(F)*F⋅S⋅F'
 end
 
 function spatialTangentTensor(model::HyperElasticModel, F::Tensor{2,dim,T}, parameters::Tuple) where {dim, T}

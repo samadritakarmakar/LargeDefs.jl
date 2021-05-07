@@ -38,7 +38,7 @@ function spatialTangentTensor(model::HyperElasticModel, F::Tensor{2,dim,T}, para
     C = model.materialTangentTensor(E, parameters)
     F_front = otimesu(F, F)
     F_back = otimesl(F, F)
-    return symmetric(1/det(F)*(F_front⊡C⊡F_back))
+    return 1/det(F)*(F_front⊡C⊡F_back)
 end
 
 ##############Models are Defined Below################################################

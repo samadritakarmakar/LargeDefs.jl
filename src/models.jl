@@ -35,10 +35,29 @@ end
 
 function spatialTangentTensor(model::HyperElasticModel, F::Tensor{2,dim,T}, parameters::Tuple) where {dim, T}
     E = getGreenLagrangeStrain(F)
-    C = model.materialTangentTensor(E, parameters)
-    F_front = otimesu(F, F)
-    F_back = otimesl(F, F)
-    return 1/det(F)*(F_front⊡C⊡F_back)
+    ℂ = model.materialTangentTensor(E, parameters)
+    #F_front = otimesu(F, F)
+    #F_back = otimesl(F, F)
+    #return 1/det(F)*(F_front⊡C⊡F_back) 
+    𝕔 = zeros(3,3,3,3)
+    for l ∈ 1:3
+        for k ∈ 1:3
+            for j ∈ 1:3
+                for i ∈ 1:3
+                    for L ∈ 1:3
+                        for K ∈ 1:3
+                            for J ∈ 1:3
+                                for I ∈ 1:3
+                                    𝕔[i,j,k,l] += F[i,I]*F[j,J]*F[k,K]*F[l,L]*ℂ[I,J,K,L]
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end 
+    return Tensor{4,3, Float64}(1/det(F)*𝕔)
 end
 
 ##############Models are Defined Below################################################

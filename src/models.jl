@@ -1,4 +1,5 @@
 struct HyperElasticModel
+    strainEnergyDensity::Function
     secondPiolaStress::Function
     materialTangentTensor::Function
 end
@@ -80,6 +81,10 @@ function saintVenant_ψ(E::SymmetricTensor{2,dim,T}, λ_μ::Tuple{Float64, Float
     return 1.0/8.0*(λ + 2*μ)*(Ic - 3.0)^2 - μ/2.0 * (-2*Ic + IIc + 3)
 end
 
+function saintVenantStrainEnergyDensity(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
+    return strainEnergyDensityGreenLagrangeBased(saintVenant_ψ, E, parameters)
+end
+
 function saintVenantSecondPiola(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
     return secondPiolaStressGreenLagrangeBased(saintVenant_ψ, E, parameters)
 end
@@ -88,7 +93,7 @@ function saintVenantMaterialTangent(E::SymmetricTensor{2,dim,T}, parameters::Tup
     return materialTangentGreenLagrangeBased(saintVenant_ψ, E, parameters)
 end
 
-const saintVenant = HyperElasticModel(saintVenantSecondPiola, saintVenantMaterialTangent)
+const saintVenant = HyperElasticModel(saintVenantStrainEnergyDensity, saintVenantSecondPiola, saintVenantMaterialTangent)
 #######################################################################################
 
 ##########################Neo Hookean Compressible#########################################
@@ -101,6 +106,10 @@ function neoHookeanCompressible_ψ(E::SymmetricTensor{2,dim,T}, λ_μ::Tuple{Flo
     return (λ / 2) * (log(J))^2 - μ * log(J) + (μ / 2) * (Ic - 3)
 end
 
+function neoHookeanCompressibleStrainEnergyDensity(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
+    return strainEnergyDensityGreenLagrangeBased(neoHookeanCompressible_ψ, E, parameters)
+end
+
 function neoHookeanCompressibleSecondPiola(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
     return secondPiolaStressGreenLagrangeBased(neoHookeanCompressible_ψ, E, parameters)
 end
@@ -109,7 +118,7 @@ function neoHookeanCompressibleMaterialTangent(E::SymmetricTensor{2,dim,T}, para
     return materialTangentGreenLagrangeBased(neoHookeanCompressible_ψ, E, parameters)
 end
 
-const neoHookeanCompressible = HyperElasticModel(neoHookeanCompressibleSecondPiola, neoHookeanCompressibleMaterialTangent)
+const neoHookeanCompressible = HyperElasticModel(neoHookeanCompressibleStrainEnergyDensity, neoHookeanCompressibleSecondPiola, neoHookeanCompressibleMaterialTangent)
 #######################################################################################
 
 ##########################Neo Hookean#########################################
@@ -123,6 +132,10 @@ function neoHookean_ψ(E::SymmetricTensor{2,dim,T}, D1_μ::Tuple{Float64, Float6
     return (μ / 2) * (Ī₁ - 3.0) +  (1.0/D1) * (J - 1)^2
 end
 
+function neoHookeanStrainEnergyDensity(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
+    return strainEnergyDensityGreenLagrangeBased(neoHookean_ψ, E, parameters)
+end
+
 function neoHookeanSecondPiola(E::SymmetricTensor{2,dim,T}, parameters::Tuple{Float64, Float64}) where {dim, T}
     return secondPiolaStressGreenLagrangeBased(neoHookean_ψ, E, parameters)
 end
@@ -131,5 +144,5 @@ function neoHookeanMaterialTangent(E::SymmetricTensor{2,dim,T}, parameters::Tupl
     return materialTangentGreenLagrangeBased(neoHookean_ψ, E, parameters)
 end
 
-const neoHookean = HyperElasticModel(neoHookeanSecondPiola, neoHookeanMaterialTangent)
+const neoHookean = HyperElasticModel(neoHookeanStrainEnergyDensity, neoHookeanSecondPiola, neoHookeanMaterialTangent)
 

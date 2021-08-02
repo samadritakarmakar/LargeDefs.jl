@@ -4,7 +4,7 @@ struct HyperElasticModel
 end
 
 function strainEnergyDensityGreenLagrangeBased(model_ψ::Function, E::SymmetricTensor{2,dim,T}, parameters::Tuple) where {dim, T}
-    return model_ψ(e, parameters)
+    return model_ψ(E, parameters)
 end
 
 function secondPiolaStressGreenLagrangeBased(model_ψ::Function, E::SymmetricTensor{2,dim,T}, parameters::Tuple) where {dim, T}

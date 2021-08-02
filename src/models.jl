@@ -3,6 +3,10 @@ struct HyperElasticModel
     materialTangentTensor::Function
 end
 
+function strainEnergyDensityGreenLagrangeBased(model_ψ::Function, E::SymmetricTensor{2,dim,T}, parameters::Tuple) where {dim, T}
+    return model_ψ(e, parameters)
+end
+
 function secondPiolaStressGreenLagrangeBased(model_ψ::Function, E::SymmetricTensor{2,dim,T}, parameters::Tuple) where {dim, T}
     ψ(e) = model_ψ(e, parameters)
     return gradient(ψ, E)

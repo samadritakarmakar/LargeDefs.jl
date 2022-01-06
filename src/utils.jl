@@ -17,6 +17,11 @@ function get_∂u_∂X_Tensor(array::Union{Array{T, N}, Adjoint{T,Array{T,N}}}, 
     get2DTensor(array, dim)[1]
 end
 
+function getDeformationGradient(∂u_∂X::Array{T, N}) where {T,N}
+    ∂u_∂X_Tensor = get_∂u_∂X_Tensor(∂u_∂X)
+    return getDeformationGradient(∂u_∂X_Tensor)
+end
+
 function getDeformationGradient(∂u_∂X::T) where T
     return one(∂u_∂X) + ∂u_∂X
 end

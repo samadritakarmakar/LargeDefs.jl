@@ -26,6 +26,15 @@ function getDeformationGradient(∂u_∂X::T) where T
     return one(∂u_∂X) + ∂u_∂X
 end
 
+function getDeformationGradientFromCurrent(∂u_∂x::Array{T, N}) where {T,N}
+    ∂u_∂x_Tensor = get_∂u_∂X_Tensor(∂u_∂x)
+    return getDeformationGradientFromCurrent(∂u_∂x_Tensor)
+end
+
+function getDeformationGradientFromCurrent(∂u_∂x::T) where T
+    return inv(one(∂u_∂x) - ∂u_∂x)
+end
+
 function getJacobianDeformationGradient(F::Array{Tensor{2,3,T,9},1}) where T
     return det(reshape(reinterpret(T, F), (3, 3)))
 end

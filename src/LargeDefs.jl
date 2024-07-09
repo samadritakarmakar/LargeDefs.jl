@@ -16,5 +16,5 @@ export HyperElasticModel
 export strainEnergyDensityGreenLagrangeBased, secondPiolaStressGreenLagrangeBased, materialTangentGreenLagrangeBased, cauchyStress, spatialTangentTensor
 export saintVenant_ψ, saintVenantSecondPiola, saintVenantMaterialTangent, saintVenant
 export neoHookeanCompressible_ψ, neoHookeanCompressibleSecondPiola, neoHookeanCompressibleMaterialTangent, neoHookeanCompressible
-
+export neoHookeanSimo_ψ, neoHookeanSimoSecondPiola, neoHookeanSimoMaterialTangent, neoHookeanSimo
 end # module

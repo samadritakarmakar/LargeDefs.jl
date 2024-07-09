@@ -146,3 +146,24 @@ end
 
 const neoHookean = HyperElasticModel(neoHookeanStrainEnergyDensity, neoHookeanSecondPiola, neoHookeanMaterialTangent)
 
+##########################Neo Hookean-Simo#########################################
+
+function neoHookeanSimo_ψ(E::SymmetricTensor{2,dim,T}, κ_μ::Tuple{Float64, Float64}) where {dim, T}
+    κ, μ = κ_μ
+    C = 2*E + one(E)
+    J = sqrt(det(C))
+    U_J = κ*(0.5*(J^2.0 - 1.0) - log(J))
+    U_bar = 0.5*μ*(J^(-2.0/3.0)*tr(C) - 3.0)
+    return U_J + U_bar
+end
+
+neoHookeanSimoStrainEnergyDensity(E::SymmetricTensor{2,dim,T}, κ_μ::Tuple{Float64, Float64}) where {dim, T} = 
+    strainEnergyDensityGreenLagrangeBased(neoHookeanSimo_ψ, E, κ_μ)
+
+neoHookeanSimoSecondPiola(E::SymmetricTensor{2,dim,T}, κ_μ::Tuple{Float64, Float64}) where {dim, T} =
+    secondPiolaStressGreenLagrangeBased(neoHookeanSimo_ψ, E, κ_μ)
+
+neoHookeanSimoMaterialTangent(E::SymmetricTensor{2,dim,T}, κ_μ::Tuple{Float64, Float64}) where {dim, T} =
+    materialTangentGreenLagrangeBased(neoHookeanSimo_ψ, E, κ_μ)
+
+const neoHookeanSimo = HyperElasticModel(neoHookeanSimoStrainEnergyDensity, neoHookeanSimoSecondPiola, neoHookeanSimoMaterialTangent)
